@@ -3,10 +3,20 @@ package main
 import (
 	"backend-github-trending/db"
 	"backend-github-trending/handler"
+	"backend-github-trending/log"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
-	"runtime"
+	"os"
 )
+
+// init function will be called automatically for each package
+func init() {
+	err := os.Setenv("APP_NAME", "github")
+	if err != nil {
+		return
+	}
+
+	log.InitLogger(false)
+}
 
 func main() {
 	sql := &db.Sql{
@@ -21,7 +31,7 @@ func main() {
 
 	defer sql.Close()
 
-	logError("Co loi xay ra")
+	log.Error("Co loi xay ra 2")
 
 	e := echo.New()
 	e.GET("/", handler.Welcome)
@@ -29,12 +39,4 @@ func main() {
 	e.GET("/user/sign-up", handler.HandleSignUp)
 
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func logError(errMsg string) {
-	_, file, line, _ := runtime.Caller(1)
-	log.WithFields(log.Fields{
-		"file": file,
-		"line": line,
-	}).Error(errMsg)
 }
