@@ -1,3 +1,4 @@
 time="2023-04-17T23:31:34.59934341+07:00" level=error msg="Co loi xay ra" file=/home/pvc/Development/backend-github-trending/main.go line=30
 time="2023-04-17T23:37:31.753177763+07:00" level=error msg="Co loi xay ra" file=/home/pvc/Development/backend-github-trending/main.go line=34
 time="2023-04-17T23:38:03.508718869+07:00" level=error msg="Co loi xay ra 2" file=/home/pvc/Development/backend-github-trending/main.go line=34
+time="2023-04-17T23:52:30.167836874+07:00" level=error msg="sql: no rows in result set" file=/home/pvc/Development/backend-github-trending/main.go line=39

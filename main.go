@@ -4,6 +4,7 @@ import (
 	"backend-github-trending/db"
 	"backend-github-trending/handler"
 	"backend-github-trending/log"
+	"context"
 	"github.com/labstack/echo/v4"
 	"os"
 )
@@ -31,7 +32,12 @@ func main() {
 
 	defer sql.Close()
 
-	log.Error("Co loi xay ra 2")
+	var email string
+	err := sql.Db.GetContext(context.Background(), &email, "SELECT email FROM users WHERE email=$1", "pvc97@gmail.com")
+
+	if err != nil {
+		log.Error(err)
+	}
 
 	e := echo.New()
 	e.GET("/", handler.Welcome)
