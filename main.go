@@ -4,7 +4,8 @@ import (
 	"backend-github-trending/db"
 	"backend-github-trending/handler"
 	"backend-github-trending/log"
-	"context"
+	"backend-github-trending/repository/repo_impl"
+	"backend-github-trending/router"
 	"github.com/labstack/echo/v4"
 	"os"
 )
@@ -29,20 +30,19 @@ func main() {
 	}
 
 	sql.Connect()
-
 	defer sql.Close()
 
-	var email string
-	err := sql.Db.GetContext(context.Background(), &email, "SELECT email FROM users WHERE email=$1", "pvc97@gmail.com")
+	e := echo.New()
 
-	if err != nil {
-		log.Error(err)
+	userHandler := handler.UserHandler{
+		UserRepo: repo_impl.NewUserRepo(sql),
 	}
 
-	e := echo.New()
-	e.GET("/", handler.Welcome)
-	e.GET("/user/sign-in", handler.HandleSignIn)
-	e.GET("/user/sign-up", handler.HandleSignUp)
+	api := router.API{
+		Echo:        e,
+		UserHandler: userHandler,
+	}
+	api.SetupRouter()
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":3000"))
 }

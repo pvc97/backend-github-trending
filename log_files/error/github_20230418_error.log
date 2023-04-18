@@ -1,0 +1,1 @@
+time="2023-04-18T22:58:57.035313313+07:00" level=error msg="code=400, message=Syntax error: offset=94, error=invalid character '}' looking for beginning of object key string, internal=invalid character '}' looking for beginning of object key string" file=/home/pvc/Development/backend-github-trending/handler/user_handler.go line=30

@@ -8,7 +8,7 @@ import (
 )
 
 type Sql struct {
-	Db *sqlx.DB
+	Db       *sqlx.DB
 	Host     string
 	Port     int
 	UserName string
@@ -16,7 +16,7 @@ type Sql struct {
 	DbName   string
 }
 
-func (s *Sql) Connect()  {
+func (s *Sql) Connect() {
 	dataSource := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		s.Host, s.Port, s.UserName, s.Password, s.DbName)
 
