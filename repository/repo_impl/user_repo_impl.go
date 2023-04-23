@@ -9,8 +9,9 @@ import (
 	"backend-github-trending/repository"
 	"context"
 	"database/sql"
-	"github.com/lib/pq"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type UserRepoImpl struct {
@@ -18,9 +19,11 @@ type UserRepoImpl struct {
 }
 
 func NewUserRepo(sql *db.Sql) repository.UserRepo {
-	return &UserRepoImpl{
+	repo := UserRepoImpl{
 		sql: sql,
 	}
+
+	return &repo
 }
 
 func (u *UserRepoImpl) CheckLogin(context context.Context, loginReq req.SignIn) (model.User, error) {

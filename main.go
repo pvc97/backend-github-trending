@@ -6,8 +6,9 @@ import (
 	"backend-github-trending/log"
 	"backend-github-trending/repository/repo_impl"
 	"backend-github-trending/router"
-	"github.com/labstack/echo/v4"
 	"os"
+
+	"github.com/labstack/echo/v4"
 )
 
 // init function will be called automatically for each package

@@ -6,10 +6,11 @@ import (
 	req "backend-github-trending/model/req"
 	"backend-github-trending/repository"
 	"backend-github-trending/security"
+	"net/http"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 type UserHandler struct {
@@ -58,6 +59,8 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 			Data:       nil,
 		})
 	}
+
+	user.Password = ""
 
 	return c.JSON(http.StatusOK, model.Response{
 		StatusCode: http.StatusOK,
