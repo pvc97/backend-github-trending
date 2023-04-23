@@ -3,7 +3,7 @@ package handler
 import (
 	"backend-github-trending/log"
 	"backend-github-trending/model"
-	req2 "backend-github-trending/model/req"
+	req "backend-github-trending/model/req"
 	"backend-github-trending/repository"
 	"backend-github-trending/security"
 	"github.com/go-playground/validator/v10"
@@ -17,16 +17,9 @@ type UserHandler struct {
 }
 
 func (u *UserHandler) HandleSignIn(c echo.Context) error {
-	return c.JSON(http.StatusOK, echo.Map{
-		"user":  "Mike",
-		"email": "cuongpv2209@gmail.com",
-	})
-}
+	signUpReq := req.SignIn{}
 
-func (u *UserHandler) HandleSignUp(c echo.Context) error {
-	req := req2.SignUp{}
-
-	if err := c.Bind(&req); err != nil {
+	if err := c.Bind(&signUpReq); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,
@@ -36,7 +29,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 	}
 
 	validate := validator.New()
-	if err := validate.Struct(req); err != nil {
+	if err := validate.Struct(signUpReq); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,
@@ -45,7 +38,57 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 		})
 	}
 
-	hash := security.HashAndSalt([]byte(req.Password))
+	user, err := u.UserRepo.CheckLogin(c.Request().Context(), signUpReq)
+
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, model.Response{
+			StatusCode: http.StatusUnauthorized,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	// Check password
+	loginSuccess := security.ComparePasswords(user.Password, []byte(signUpReq.Password))
+
+	if !loginSuccess {
+		return c.JSON(http.StatusUnauthorized, model.Response{
+			StatusCode: http.StatusUnauthorized,
+			Message:    "Đăng nhập thất bại",
+			Data:       nil,
+		})
+	}
+
+	return c.JSON(http.StatusOK, model.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Xử lý thành công",
+		Data:       user,
+	})
+}
+
+func (u *UserHandler) HandleSignUp(c echo.Context) error {
+	signInReq := req.SignUp{}
+
+	if err := c.Bind(&signInReq); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, model.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	validate := validator.New()
+	if err := validate.Struct(signInReq); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, model.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	hash := security.HashAndSalt([]byte(signInReq.Password))
 	role := model.MEMBER.String()
 	userId, err := uuid.NewUUID()
 
@@ -61,8 +104,8 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 
 	user := model.User{
 		UserId:   userId.String(),
-		FullName: req.FullName,
-		Email:    req.Email,
+		FullName: signInReq.FullName,
+		Email:    signInReq.Email,
 		Password: hash,
 		Role:     role,
 		Token:    "",
