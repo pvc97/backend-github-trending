@@ -53,6 +53,8 @@ func (u *UserRepoImpl) SaveUser(context context.Context, user model.User) (model
 				return user, banana.UserConflict
 			}
 		}
+
+		return user, banana.SignUpFail
 	}
 
 	return user, nil
