@@ -38,7 +38,7 @@ func doWork(animal *Animal) {
 	(*animal).Sleep()
 }
 
-func main() {
+func main2() {
 	person := NewPerson("PVC", 23)
 	// print address of person
 	fmt.Println(&person)
