@@ -9,7 +9,6 @@ import (
 	"backend-github-trending/security"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -31,8 +30,7 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 		})
 	}
 
-	validate := validator.New()
-	if err := validate.Struct(signUpReq); err != nil {
+	if err := c.Validate(signUpReq); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,
@@ -92,8 +90,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 		})
 	}
 
-	validate := validator.New()
-	if err := validate.Struct(signInReq); err != nil {
+	if err := c.Validate(signInReq); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,

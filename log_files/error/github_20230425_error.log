@@ -1,0 +1,3 @@
+time="2023-04-25T23:56:37.000897893+07:00" level=error msg="Key: 'SignIn.Password' Error:Field validation for 'Password' failed on the 'required' tag" file=/home/pvc/Development/backend-github-trending/handler/user_handler.go line=36
+time="2023-04-25T23:56:46.139879149+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file=/home/pvc/Development/backend-github-trending/repository/repo_impl/user_repo_impl.go line=52
+time="2023-04-26T00:18:18.654890148+07:00" level=error msg="Mật khẩu tối thiểu 8 kí tự" file=/home/pvc/Development/backend-github-trending/handler/user_handler.go line=94
