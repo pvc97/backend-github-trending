@@ -12,3 +12,7 @@
 ```javascript
 require('crypto').randomBytes(64).toString('hex');
 ```
+
+# Custom validator
+
+- To use custom validator, We need to add struct_validator.go and edit tag of struct model like SignIn model in req_signin.go (validate:"pwd"). And update main.go as well as use c.Validate(model) instead of validate.Struct
