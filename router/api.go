@@ -23,7 +23,13 @@ func (api *API) SetupRouter() {
 	user.GET("/profile", api.UserHandler.Profile)
 	user.PUT("/profile", api.UserHandler.UpdateProfile)
 
-	// github repo
+	// GitHub repo
 	github := api.Echo.Group("/github", middleware.JwtMiddleware())
 	github.GET("/trending", api.RepoHandler.RepoTrending)
+
+	// bookmark
+	bookmark := api.Echo.Group("/bookmark", middleware.JwtMiddleware())
+	bookmark.GET("/list", api.RepoHandler.SelectBookmarks)
+	bookmark.POST("/add", api.RepoHandler.Bookmark)
+	bookmark.DELETE("/delete", api.RepoHandler.DelBookmark)
 }
